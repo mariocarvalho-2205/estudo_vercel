@@ -8,18 +8,23 @@
 				"maxLambdaSize": "50mb",
 				"nodeVersion": "20.x",
 				"includeFiles": [
-          "db/**",
-          "node_modules/pg/**",
-          "node_modules/pg-hstore/**"
-        ],
-        "supportsResponseStreaming": true
+					"db/**",
+					"node_modules/pg/**",
+					"node_modules/pg-hstore/**"
+				],
+				"supportsResponseStreaming": true
 			}
 		}
 	],
 	"routes": [
-		{
-			"src": "/.*",
-			"dest": "index.js"
-		}
-	]
+    {
+      "src": "/user/.*",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "https://estudo-vercel-e99u.vercel.app",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    }
+  ]
 }
