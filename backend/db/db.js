@@ -6,7 +6,12 @@ const dbConfig = {
   dialect: 'postgres',
   dialectModule: pg,
   logging: false,
-  dialectOptions: {}
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false // Permite certificados auto-assinados
+    }
+  }
 };
 
 // Configuração específica para produção (Supabase)
