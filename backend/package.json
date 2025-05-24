@@ -19,10 +19,10 @@
 		"@supabase/supabase-js": "^2.49.8",
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
-		"express": "^5.0.0",
+		"express": "5.0.0-beta.1",
 		"path-to-regexp": "^6.2.1",
-		"pg": "^8.16.0",
+		"pg": "8.11.3",
 		"pg-hstore": "^2.3.4",
-		"sequelize": "^6.32.1"
+		"sequelize": "6.37.3"
 	}
 }

@@ -1,13 +1,9 @@
 import { Router } from 'express';
+import { createUser } from "../controller/userController.js"
 const router = Router();
 
 // Rotas explícitas sem parâmetros dinâmicos
-router.post('/user/register', (req, res, next) => {
-  userController.createUser(req, res).catch(next);
-});
-
-router.get('/user/test', (req, res) => {
-  res.send("Chegou");
-});
+router.post('/register', createUser);
+router.get('/test', (req, res) => res.send("Chegou"));
 
 export default router;

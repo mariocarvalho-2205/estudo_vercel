@@ -10,7 +10,7 @@ console.log('PG version:', pg.default ? pg.default.version : pg.version); // Ver
 
 const app = express();
 const port = 3000;
-
+app.disable('x-powered-by'); // Segurança adicional
 // password vercel_backend = Msct.142205!
 
 // Domínios permitidos
@@ -20,19 +20,12 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Permite requests sem origin (como mobile apps ou curl)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'A política de CORS não permite acesso deste domínio';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  origin: [
+    'https://estudo-vercel-e99u.vercel.app',
+    'http://localhost:5173'
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
 }));
 
 // Rota especial para OPTIONS (preflight)
@@ -40,7 +33,8 @@ app.options('*', cors());
 
 app.use(express.json());
 
-app.use(router);
+// Rotas
+app.use('/user', router);
 
 process.on('uncaughtException', (err) => {
   console.error('Erro não tratado:', err);
@@ -50,25 +44,25 @@ process.on('unhandledRejection', (err) => {
   console.error('Promise rejeitada não tratada:', err);
 });
 
-// Modifique a parte final para:
-const startServer = async () => {
+// Inicialização segura
+const start = async () => {
   try {
     await db.authenticate();
     console.log('✅ Banco conectado');
     
-    // Só sincroniza em desenvolvimento
     if (process.env.NODE_ENV !== 'production') {
-      await db.sync();
+      await db.sync({ force: false });
       console.log('✅ Modelos sincronizados');
     }
 
-    app.listen(port, () => {
-      console.log(`🚀 Servidor rodando em http://localhost:${port}`);
+    app.listen(3000, () => {
+      console.log(`🚀 Servidor rodando na porta 3000`);
     });
-  } catch (err) {
-    console.error('❌ Falha ao iniciar:', err);
+  } catch (error) {
+    console.error('❌ Falha na inicialização:', error);
     process.exit(1);
   }
 };
 
-startServer();
+start();
+export default app
