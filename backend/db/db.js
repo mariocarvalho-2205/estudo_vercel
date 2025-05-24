@@ -1,40 +1,46 @@
-import pg from 'pg';
 import { Sequelize } from 'sequelize';
+import pg from 'pg';
 
-const { Pool } = pg;
-
-// Configuração otimizada para Vercel
-const db = new Sequelize(process.env.DATABASE_URL, {
+// Configuração segura para desenvolvimento e produção
+const dbConfig = {
   dialect: 'postgres',
   dialectModule: pg,
   logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    },
-    connection: {
-      options: `project=${process.env.SUPABASE_URL.split('/').pop()}`
-    }
-  },
-  define: {
-    freezeTableName: true
-  }
-});
+  dialectOptions: {}
+};
 
-// Verificação de conexão
+// Configuração específica para produção (Supabase)
+if (process.env.NODE_ENV === 'production') {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL não está definida para produção');
+  }
+
+  dbConfig.dialectOptions.ssl = {
+    require: true,
+    rejectUnauthorized: false
+  };
+  
+  // Opcional: Configuração específica do Supabase
+  if (process.env.SUPABASE_URL) {
+    dbConfig.dialectOptions.connection = {
+      options: `project=${process.env.SUPABASE_URL.split('/').pop()}`
+    };
+  }
+}
+
+// Conexão com o banco de dados
+const db = new Sequelize(
+  process.env.DATABASE_URL || 'postgres://user:pass@localhost:5432/dbname',
+  dbConfig
+);
+
+// Teste de conexão
 (async () => {
   try {
     await db.authenticate();
-    console.log('🟢 Conexão com Supabase estabelecida');
-    
-    // Sincronização segura para produção
-    if (process.env.NODE_ENV === 'development') {
-      await db.sync();
-      console.log('🟢 Modelos sincronizados');
-    }
+    console.log('✅ Conexão com o banco estabelecida');
   } catch (error) {
-    console.error('🔴 Erro de conexão:', error);
+    console.error('❌ Falha na conexão com o banco:', error);
     process.exit(1);
   }
 })();

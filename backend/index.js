@@ -1,5 +1,3 @@
-import "dotenv/config";
-import pg from 'pg';
 import express from "express";
 import db from "./db/db.js";
 import router from "./routes/Router.js";
@@ -8,33 +6,18 @@ import cors from "cors";
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.disable('x-powered-by');
-
-// Configuração do CORS
+// Configuração simplificada do CORS
 app.use(cors({
   origin: [
     'https://estudo-vercel-e99u.vercel.app',
     'http://localhost:5173'
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true
+  allowedHeaders: ['Content-Type']
 }));
 
-app.options('*', cors());
 app.use(express.json());
-
-// Rotas
-app.use('/api', router); // Prefixo modificado para /api
-
-// Tratamento de erros global
-process.on('uncaughtException', (err) => {
-  console.error('Erro não tratado:', err);
-});
-
-process.on('unhandledRejection', (err) => {
-  console.error('Promise rejeitada não tratada:', err);
-});
+app.use('/api', router); // Prefixo para todas as rotas
 
 // Inicialização segura
 const startServer = async () => {
@@ -43,7 +26,7 @@ const startServer = async () => {
     console.log('✅ Banco conectado');
     
     if (process.env.NODE_ENV !== 'production') {
-      await db.sync({ force: false });
+      await db.sync();
       console.log('✅ Modelos sincronizados');
     }
 
