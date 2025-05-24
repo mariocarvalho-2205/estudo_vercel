@@ -1,11 +1,13 @@
-import {Router} from "express"
-import userRoutes from "../routes/userRoutes.js"
-const router = Router()
+import { Router } from 'express';
+const router = Router();
 
-router.use("/user", userRoutes )
+// Rotas explícitas sem parâmetros dinâmicos
+router.post('/user/register', (req, res, next) => {
+  userController.createUser(req, res).catch(next);
+});
 
-router.get("/test", (req, res) => {
-    res.send("Chegou")
-})
+router.get('/user/test', (req, res) => {
+  res.send("Chegou");
+});
 
-export default router
+export default router;

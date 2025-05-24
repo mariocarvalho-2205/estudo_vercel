@@ -50,10 +50,25 @@ process.on('unhandledRejection', (err) => {
   console.error('Promise rejeitada não tratada:', err);
 });
 
-db.sync()
-	.then(() => {
-		app.listen(port, () => {
-			console.info(`connect to port d ${port}`);
-		});
-	})
-	.catch((err) => console.error("Erro no server ", err));
+// Modifique a parte final para:
+const startServer = async () => {
+  try {
+    await db.authenticate();
+    console.log('✅ Banco conectado');
+    
+    // Só sincroniza em desenvolvimento
+    if (process.env.NODE_ENV !== 'production') {
+      await db.sync();
+      console.log('✅ Modelos sincronizados');
+    }
+
+    app.listen(port, () => {
+      console.log(`🚀 Servidor rodando em http://localhost:${port}`);
+    });
+  } catch (err) {
+    console.error('❌ Falha ao iniciar:', err);
+    process.exit(1);
+  }
+};
+
+startServer();
