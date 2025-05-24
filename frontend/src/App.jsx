@@ -10,7 +10,7 @@ function App() {
 
 		try {
 			const formData = { nome: nome };
-			const response = await api.post("/user/register", formData, {
+			const response = await api.post("/user/register", {nome: formData.nome}, {
 				headers: {
 					"Content-Type": "application/json",
 				},
