@@ -1,9 +1,11 @@
 import "dotenv/config"; // Carrega as variáveis UMA VEZ
+import pg from 'pg';
 import express from "express";
 import db from "./db/db.js";
 import router from "./routes/Router.js";
 import cors from "cors";
 
+console.log('PG version:', pg.default ? pg.default.version : pg.version); // Verificação
 // console.log("index", process.env.SUPABASE_URL); // Acessa as variáveis
 
 const app = express();

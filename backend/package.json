@@ -7,10 +7,9 @@
 		"node": "20.10.0"
 	},
 	"scripts": {
-		"start": "node index.js",
-		"postinstall": "npm install pg --omit=dev",
-		"dev": "node --trace-warnings --watch ./index.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"preinstall": "npm install pg@8.11.3 pg-hstore@2.3.4 --no-save",
+		"start": "node --experimental-vm-modules index.js",
+		"vercel-build": "npm install && npm run preinstall"
 	},
 	"keywords": [],
 	"author": "Mario_Carvalho <mario.carvalho.ms@gmail.com>",

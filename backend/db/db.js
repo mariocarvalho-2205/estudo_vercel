@@ -1,27 +1,42 @@
-import { Sequelize } from "sequelize";
+import pg from 'pg';
+import { Sequelize } from 'sequelize';
 
-// console.log("db",process.env.DATABASE_URL ? "chegou" : "nao chegou");
-// const db = process.env.DATABASE_URL ? "chegou" : "Nao chegou"
+const { Pool } = pg;
 
-// Verifica se o pg está instalado
-try {
-  require('pg');
-} catch (error) {
-  console.error('ERRO: Pacote pg não instalado. Rode: npm install pg');
-  process.exit(1);
-}
-
+// Configuração otimizada para Vercel
 const db = new Sequelize(process.env.DATABASE_URL, {
-	dialect: "postgres",
-	logging: false,
-	// host: "localhost",
+  dialect: 'postgres',
+  dialectModule: pg,
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    },
+    connection: {
+      options: `project=${process.env.SUPABASE_URL.split('/').pop()}`
+    }
+  },
+  define: {
+    freezeTableName: true
+  }
 });
 
-db.authenticate()
-	.then(() => console.log("Conexão com o banco OK"))
-	.catch((err) => {
-		console.error("Falha na conexão com o DB:", err);
-		process.exit(1); // Encerra o app se o DB falhar
-	});
+// Verificação de conexão
+(async () => {
+  try {
+    await db.authenticate();
+    console.log('🟢 Conexão com Supabase estabelecida');
+    
+    // Sincronização segura para produção
+    if (process.env.NODE_ENV === 'development') {
+      await db.sync();
+      console.log('🟢 Modelos sincronizados');
+    }
+  } catch (error) {
+    console.error('🔴 Erro de conexão:', error);
+    process.exit(1);
+  }
+})();
 
 export default db;
