@@ -4,7 +4,6 @@ import router from "./routes/Router.js";
 import cors from "cors";
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Configuração do CORS atualizada
 app.use(cors({
@@ -18,28 +17,32 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use('/api', router); // Prefixo para todas as rotas
 
-// Inicialização segura
-const startServer = async () => {
+// Rota de teste para verificar se o servidor está funcionando
+app.get('/', (req, res) => {
+  res.json({ message: 'Backend funcionando!' });
+});
+
+// Middleware para testar a conexão com o banco antes de usar as rotas
+const dbMiddleware = async (req, res, next) => {
   try {
     await db.authenticate();
-    console.log('✅ Banco conectado');
-    
-    if (process.env.NODE_ENV !== 'production') {
-      await db.sync();
-      console.log('✅ Modelos sincronizados');
-    }
-
-    app.listen(port, () => {
-      console.log(`🚀 Servidor rodando na porta ${port}`);
-    });
+    next();
   } catch (error) {
-    console.error('❌ Falha na inicialização:', error);
-    process.exit(1);
+    console.error('Erro na conexão com o banco:', error);
+    res.status(500).json({ error: 'Erro na conexão com o banco de dados' });
   }
 };
 
-startServer();
+// Aplicando o middleware apenas nas rotas que precisam do banco
+app.use('/api', dbMiddleware, router);
+
+// Se estiver rodando localmente
+if (process.env.NODE_ENV !== 'production') {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`🚀 Servidor rodando na porta ${port}`);
+  });
+}
 
 export default app;

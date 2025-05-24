@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import pg from 'pg';
 
-// Configuração segura para desenvolvimento e produção
+// Configuração do banco de dados
 const dbConfig = {
   dialect: 'postgres',
   dialectModule: pg,
@@ -9,7 +9,7 @@ const dbConfig = {
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false // Permite certificados auto-assinados
+      rejectUnauthorized: false
     }
   }
 };
@@ -38,16 +38,5 @@ const db = new Sequelize(
   process.env.DATABASE_URL || 'postgres://user:pass@localhost:5432/dbname',
   dbConfig
 );
-
-// Teste de conexão
-(async () => {
-  try {
-    await db.authenticate();
-    console.log('✅ Conexão com o banco estabelecida');
-  } catch (error) {
-    console.error('❌ Falha na conexão com o banco:', error);
-    process.exit(1);
-  }
-})();
 
 export default db;
