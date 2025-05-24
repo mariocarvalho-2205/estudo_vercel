@@ -1,0 +1,26 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"type": "module",
+	"engines": {
+		"node": "18.x"
+	},
+	"scripts": {
+		"dev": "node --trace-warnings --watch ./index.js localhost 3000",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "Mario_Carvalho <mario.carvalho.ms@gmail.com>",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"@supabase/supabase-js": "^2.49.8",
+		"cors": "^2.8.5",
+		"dotenv": "^16.5.0",
+		"express": "^5.1.0",
+		"pg": "^8.16.0",
+		"pg-hstore": "^2.3.4",
+		"sequelize": "^6.37.7"
+	}
+}
