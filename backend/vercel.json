@@ -1,33 +1,24 @@
 {
-	"version": 2,
-	"builds": [
-		{
-			"src": "api/index.js",
-			"use": "@vercel/node",
-			"config": {
-				"maxLambdaSize": "50mb",
-				"nodeVersion": "20.x",
-				"includeFiles": [
-					"db/**",
-					"routes/**",
-					"models/**",
-					"node_modules/pg/**",
-					"node_modules/pg-hstore/**"
-				],
-				"supportsResponseStreaming": true
-			}
-		}
-	],
-	"routes": [
-		{
-			"src": "/user/.*",
-			"dest": "api/index.js",
-			"methods": ["GET", "POST", "OPTIONS"],
-			"headers": {
-				"Access-Control-Allow-Origin": "https://estudo-vercel-e99u.vercel.app",
-				"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-				"Access-Control-Allow-Headers": "Content-Type"
-			}
-		}
-	]
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "db/**",
+          "routes/**",
+          "models/**",
+          "controller/**"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.js",
+      "methods": ["GET", "POST", "OPTIONS"]
+    }
+  ]
 }

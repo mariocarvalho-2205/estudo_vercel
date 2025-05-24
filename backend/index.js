@@ -1,41 +1,33 @@
-import "dotenv/config"; // Carrega as variáveis UMA VEZ
+import "dotenv/config";
 import pg from 'pg';
 import express from "express";
 import db from "./db/db.js";
 import router from "./routes/Router.js";
 import cors from "cors";
 
-console.log('PG version:', pg.default ? pg.default.version : pg.version); // Verificação
-// console.log("index", process.env.SUPABASE_URL); // Acessa as variáveis
-
 const app = express();
-const port = 3000;
-app.disable('x-powered-by'); // Segurança adicional
-// password vercel_backend = Msct.142205!
+const port = process.env.PORT || 3000;
 
-// Domínios permitidos
-const allowedOrigins = [
-  'https://estudo-vercel-e99u.vercel.app',
-  'http://localhost:5173'
-];
+app.disable('x-powered-by');
 
+// Configuração do CORS
 app.use(cors({
   origin: [
     'https://estudo-vercel-e99u.vercel.app',
     'http://localhost:5173'
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: ['Content-Type'],
+  credentials: true
 }));
 
-// Rota especial para OPTIONS (preflight)
 app.options('*', cors());
-
 app.use(express.json());
 
 // Rotas
-app.use('/user', router);
+app.use('/api', router); // Prefixo modificado para /api
 
+// Tratamento de erros global
 process.on('uncaughtException', (err) => {
   console.error('Erro não tratado:', err);
 });
@@ -45,7 +37,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 // Inicialização segura
-const start = async () => {
+const startServer = async () => {
   try {
     await db.authenticate();
     console.log('✅ Banco conectado');
@@ -55,8 +47,8 @@ const start = async () => {
       console.log('✅ Modelos sincronizados');
     }
 
-    app.listen(3000, () => {
-      console.log(`🚀 Servidor rodando na porta 3000`);
+    app.listen(port, () => {
+      console.log(`🚀 Servidor rodando na porta ${port}`);
     });
   } catch (error) {
     console.error('❌ Falha na inicialização:', error);
@@ -64,5 +56,6 @@ const start = async () => {
   }
 };
 
-start();
-export default app
+startServer();
+
+export default app;

@@ -7,22 +7,20 @@
 		"node": "20.10.0"
 	},
 	"scripts": {
-		"preinstall": "npm install pg@8.11.3 pg-hstore@2.3.4 --no-save",
-		"start": "node --experimental-vm-modules index.js",
-		"vercel-build": "npm install && npm run preinstall"
+		"start": "node index.js",
+		"dev": "NODE_ENV=development node index.js",
+		"vercel-build": "npm install && npm run build"
 	},
 	"keywords": [],
 	"author": "Mario_Carvalho <mario.carvalho.ms@gmail.com>",
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
-		"@supabase/supabase-js": "^2.49.8",
-		"cors": "^2.8.5",
-		"dotenv": "^16.5.0",
-		"express": "5.0.0-beta.1",
-		"path-to-regexp": "^6.2.1",
+		"express": "5.0.0",
 		"pg": "8.11.3",
-		"pg-hstore": "^2.3.4",
-		"sequelize": "6.37.3"
+		"sequelize": "6.37.3",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
+		"path-to-regexp": "6.2.1"
 	}
 }
