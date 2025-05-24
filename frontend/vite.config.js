@@ -8,6 +8,13 @@ export default defineConfig({
     emptyOutDir: true
   },
   server: {
-    open: true
+    open: true,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 })

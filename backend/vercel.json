@@ -2,24 +2,23 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.js",
+      "src": "index.js",
       "use": "@vercel/node",
       "config": {
-        "nodeVersion": "20.x",
-        "includeFiles": [
-          "db/**",
-          "routes/**",
-          "models/**",
-          "controller/**"
-        ]
+        "nodeVersion": "20.x"
       }
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "api/index.js",
-      "methods": ["GET", "POST", "OPTIONS"]
+      "src": "/(.*)",
+      "dest": "index.js",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      }
     }
   ]
 }
