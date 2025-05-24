@@ -9,13 +9,18 @@ function App() {
 		e.preventDefault();
 
 		try {
-			const response = await api.post("/user/register", { nome });
+			const response = await api.post("/user/register", data, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 			console.log(response.data.message, "response front");
-      setNome("")
+			setNome("");
 		} catch (error) {
 			console.error("Erro ao salvar:", error);
 			if (error.response) {
 				// O servidor respondeu com um status fora do range 2xx
+				console.error('Erro detalhado:', error.response?.data || error.message);
 				console.error("Erro de resposta:", error.response.data);
 				console.error("Status:", error.response.status);
 				console.error("Headers:", error.response.headers);
