@@ -24,6 +24,14 @@ app.use(express.json());
 
 app.use(router);
 
+process.on('uncaughtException', (err) => {
+  console.error('Erro não tratado:', err);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('Promise rejeitada não tratada:', err);
+});
+
 db.sync()
 	.then(() => {
 		app.listen(port, () => {

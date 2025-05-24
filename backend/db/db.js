@@ -1,4 +1,4 @@
-import {Sequelize} from "sequelize";
+import { Sequelize } from "sequelize";
 
 // console.log("db",process.env.DATABASE_URL ? "chegou" : "nao chegou");
 // const db = process.env.DATABASE_URL ? "chegou" : "Nao chegou"
@@ -8,11 +8,11 @@ const db = new Sequelize(process.env.DATABASE_URL, {
 	host: "localhost",
 });
 
-try {
-	db.authenticate();
-	console.info("Conexão com o banco de dados foi bem-sucedida.");
-} catch (error) {
-	console.error("Erro ao conectar ao banco de dados:", error);
-}
+db.authenticate()
+	.then(() => console.log("Conexão com o banco OK"))
+	.catch((err) => {
+		console.error("Falha na conexão com o DB:", err);
+		process.exit(1); // Encerra o app se o DB falhar
+	});
 
 export default db;

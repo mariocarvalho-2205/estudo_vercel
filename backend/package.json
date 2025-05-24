@@ -4,10 +4,11 @@
 	"main": "index.js",
 	"type": "module",
 	"engines": {
-		"node": "20.x"
+		"node": "20.10.0"
 	},
 	"scripts": {
-		"dev": "node --trace-warnings --watch ./index.js localhost 3000",
+		"start" : "node index.js",
+		"dev": "node --trace-warnings --watch ./index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
