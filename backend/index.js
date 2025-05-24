@@ -16,7 +16,7 @@ const port = 3000;
 app.use(
 	cors({
 		credentials: true,
-		origin: ["https://meu-frontend.vercel.app", "http://localhost:5173"],
+		origin: ["https://estudo-vercel-e99u.vercel.app/", "http://localhost:5173"],
 		methods: ["GET", "POST", "PUT", "DELETE"],
 		allowedHeaders: ["Content-Type"],
 	})
