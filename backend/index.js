@@ -6,14 +6,15 @@ import cors from "cors";
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configuração simplificada do CORS
+// Configuração do CORS atualizada
 app.use(cors({
   origin: [
     'https://estudo-vercel-e99u.vercel.app',
     'http://localhost:5173'
   ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['X-Requested-With', 'Content-Type', 'Accept'],
+  credentials: true
 }));
 
 app.use(express.json());
